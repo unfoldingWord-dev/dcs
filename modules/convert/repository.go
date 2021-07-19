@@ -6,6 +6,8 @@ package convert
 
 import (
 	"code.gitea.io/gitea/models"
+	"code.gitea.io/gitea/modules/dcs"
+	"code.gitea.io/gitea/modules/log"
 	api "code.gitea.io/gitea/modules/structs"
 )
 
@@ -91,6 +93,34 @@ func innerToRepo(repo *models.Repository, mode models.AccessMode, isParent bool)
 
 	numReleases, _ := models.GetReleaseCountByRepoID(repo.ID, models.FindReleasesOptions{IncludeDrafts: false, IncludeTags: false})
 
+	/*** DCS Customizations ***/
+
+	// TODO: Load in Repository's LoadAttributes() function and save to repo.Metadata
+	metadata, err := models.GetDoor43MetadataByRepoIDAndReleaseID(repo.ID, 0)
+	if err != nil && !models.IsErrDoor43MetadataNotExist(err) {
+		log.Error("GetDoor43MetadataByRepoIDAndReleaseID: %v", err)
+	}
+	// if metadata == nil {
+	// 	metadata, err = repo.GetLatestPreProdCatalogMetadata()
+	// 	if err != nil {
+	// 		log.Error("GetLatestPreProdCatalogMetadata: %v", err)
+	// 	}
+	// }
+
+	var language, title, subject, checkingLevel string
+	var books []string
+	if metadata != nil {
+		language = (*metadata.Metadata)["dublin_core"].(map[string]interface{})["language"].(map[string]interface{})["identifier"].(string)
+		title = (*metadata.Metadata)["dublin_core"].(map[string]interface{})["title"].(string)
+		subject = (*metadata.Metadata)["dublin_core"].(map[string]interface{})["subject"].(string)
+		books = metadata.GetBooks()
+		checkingLevel = (*metadata.Metadata)["checking"].(map[string]interface{})["checking_level"].(string)
+	} else {
+		language = dcs.GetLanguageFromRepoName(repo.LowerName)
+		subject = dcs.GetSubjectFromRepoName(repo.LowerName)
+	}
+	/*** END DCS Customizations ***/
+
 	mirrorInterval := ""
 	if repo.IsMirror {
 		if err := repo.GetMirror(); err == nil {
@@ -140,6 +170,11 @@ func innerToRepo(repo *models.Repository, mode models.AccessMode, isParent bool)
 		AllowRebaseMerge:          allowRebaseMerge,
 		AllowSquash:               allowSquash,
 		AvatarURL:                 repo.AvatarLink(),
+		Language:                  language,
+		Title:                     title,
+		Subject:                   subject,
+		Books:                     books,
+		CheckingLevel:             checkingLevel,
 		Internal:                  !repo.IsPrivate && repo.Owner.Visibility == api.VisibleTypePrivate,
 		MirrorInterval:            mirrorInterval,
 	}

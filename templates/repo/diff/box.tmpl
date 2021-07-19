@@ -52,6 +52,17 @@
 							{{template "repo/diff/stats" dict "file" . "root" $}}
 						</div>
 						<span class="file mono">{{$file.Name}}</span>
+						<!-- DCS Customizations -->
+						{{if and (eq $file.Name "manifest.yaml") ($.ValidateManifestResult)}}
+							<div class="fitted item">
+							{{if $.ValidateManifestResult.Valid}}
+								<span class="ui label green green" title="{{$.i18n.Tr "repo.metadata.valid_manifest_tooltip"}}">{{$.i18n.Tr "repo.metadata.valid"}}</span>
+							{{else}}
+								<span class="ui label red" title="{{$.ValidateManifestResultErrors}}">{{$.i18n.Tr "repo.metadata.invalid"}}</span>
+							{{end}}
+							</div>
+						{{end}}
+						<!-- END DCS Customizations -->
 						<div class="diff-file-header-actions df ac">
 							<div class="text grey">{{$.i18n.Tr "repo.diff.file_suppressed"}}</div>
 							{{if $file.IsProtected}}
@@ -88,6 +99,15 @@
 								{{end}}
 							</div>
 							<span class="file mono">{{if $file.IsRenamed}}{{$file.OldName}} &rarr; {{end}}{{$file.Name}}{{if .IsLFSFile}} ({{$.i18n.Tr "repo.stored_lfs"}}){{end}}</span>
+							<!-- DCS Customizations -->
+							{{if and (eq $file.Name "manifest.yaml") ($.ValidateManifestResult)}}
+								{{if $.ValidateManifestResult.Valid}}
+									<span class="ui label green green" title="{{$.i18n.Tr "repo.metadata.valid_manifest_tooltip"}}">{{$.i18n.Tr "repo.metadata.valid"}}</span>
+								{{else}}
+									<span class="ui label red" title="{{$.ValidateManifestResultErrors}}">{{$.i18n.Tr "repo.metadata.invalid"}}</span>
+								{{end}}
+							{{end}}
+							<!-- END DCS Customizations -->
 						</div>
 						<div class="diff-file-header-actions df ac">
 							{{if $file.IsProtected}}

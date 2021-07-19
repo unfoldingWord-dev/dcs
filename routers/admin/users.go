@@ -41,6 +41,9 @@ func Users(ctx *context.Context) {
 			PageSize: setting.UI.Admin.UserPagingNum,
 		},
 		SearchByEmail: true,
+		/*** DCS Customizations ***/
+		RepoLanguages: ctx.QueryStrings("lang"),
+		/*** END DCS Customizations ***/
 	}, tplUsers)
 }
 

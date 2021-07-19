@@ -36,6 +36,16 @@
 						{{else if .IsMirror}}
 							{{svg "octicon-mirror"}}
 						{{end}}
+						<!-- DCS Customizations -->
+						{{$prodDM := .GetLatestProdCatalogMetadata}}
+						{{if $prodDM}}
+							<span class="ui green label" title="Catalog: Production"><a href="{{.Link}}/releases/tag/{{$prodDM.Release.TagName | EscapePound}}" rel="nofollow">{{$prodDM.Release.TagName}}</a></span>
+						{{end}}
+						{{$preProdDM := .GetLatestPreProdCatalogMetadata}}
+						{{if $preProdDM}}
+							<span class="ui orange label" title="Catalog: Pre-Production"><a href="{{.Link}}/releases/tag/{{$preProdDM.Release.TagName | EscapePound}}" rel="nofollow">{{$preProdDM.Release.TagName}}</a></span>
+						{{end}}
+						<!-- END DCS Customizations -->
 					</div>
 				</div>
 				<div class="metas df ac">

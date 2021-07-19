@@ -17,6 +17,14 @@
 					<span class="ui">{{svg "octicon-database"}} <b>{{SizeFmt .Repository.Size}}</b></span>
 				</div>
 			{{end}}
+			<!-- DCS Customizations -->
+			{{$dm := .Repository.GetDefaultBranchMetadata}}
+			{{ if $dm }}
+				<div class="item">
+					<a class="ui" href="{{AppSubUrl}}/explore/repos?q=lang:{{$dm.Metadata.dublin_core.language.identifier}}"><i class="fa fa-language"></i> <b>{{$dm.Metadata.dublin_core.language.title}} ({{$dm.Metadata.dublin_core.language.identifier}})</b></a>
+				</div>
+			{{ end }}
+			<!-- END DCS Customizations -->
 		</div>
 	</div>
 	{{if and (.Permission.CanRead $.UnitTypeCode) (not .IsEmptyRepo) .LanguageStats }}

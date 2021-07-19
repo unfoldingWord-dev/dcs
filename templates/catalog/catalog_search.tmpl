@@ -1,0 +1,37 @@
+<div class="ui right floated secondary filter menu">
+    <!-- Sort -->
+    <div class="ui right dropdown type jump item">
+		<span class="text">
+			{{.i18n.Tr "repo.issues.filter_sort"}}
+                <i class="dropdown icon"></i>
+		</span>
+        <div class="menu">
+            <a class="{{if eq .SortType "newest"}}active{{end}} item" href="{{$.Link}}?sort=newest&q={{$.Keyword}}">{{.i18n.Tr "repo.issues.filter_sort.latest"}}</a>
+            <a class="{{if eq .SortType "oldest"}}active{{end}} item" href="{{$.Link}}?sort=oldest&q={{$.Keyword}}">{{.i18n.Tr "repo.issues.filter_sort.oldest"}}</a>
+            <a class="{{if eq .SortType "title"}}active{{end}} item" href="{{$.Link}}?sort=title&q={{$.Keyword}}">{{.i18n.Tr "repo.metadata.label.filter_sort.title"}}</a>
+            <a class="{{if eq .SortType "reversetitle"}}active{{end}} item" href="{{$.Link}}?sort=reversetitle&q={{$.Keyword}}">{{.i18n.Tr "repo.metadata.label.filter_sort.reverse_title"}}</a>
+            <a class="{{if eq .SortType "subject"}}active{{end}} item" href="{{$.Link}}?sort=subject&q={{$.Keyword}}">{{.i18n.Tr "repo.metadata.label.filter_sort.subject"}}</a>
+            <a class="{{if eq .SortType "reversesubject"}}active{{end}} item" href="{{$.Link}}?sort=reversesubject&q={{$.Keyword}}">{{.i18n.Tr "repo.metadata.label.filter_sort.reverse_subject"}}</a>
+            <a class="{{if eq .SortType "tag"}}active{{end}} item" href="{{$.Link}}?sort=title&q={{$.Keyword}}">{{.i18n.Tr "repo.metadata.label.filter_sort.tag"}}</a>
+            <a class="{{if eq .SortType "reversetag"}}active{{end}} item" href="{{$.Link}}?sort=reversetitle&q={{$.Keyword}}">{{.i18n.Tr "repo.metadata.label.filter_sort.reverse_tag"}}</a>
+            <a class="{{if eq .SortType "langcode"}}active{{end}} item" href="{{$.Link}}?sort=langcode&q={{$.Keyword}}">{{.i18n.Tr "repo.metadata.label.filter_sort.langcode"}}</a>
+            <a class="{{if eq .SortType "reverselangcode"}}active{{end}} item" href="{{$.Link}}?sort=reverselangcode&q={{$.Keyword}}">{{.i18n.Tr "repo.metadata.label.filter_sort.reverse_langcode"}}</a>
+            <a class="{{if eq .SortType "mostreleases"}}active{{end}} item" href="{{$.Link}}?sort=mostreleases&q={{$.Keyword}}">{{.i18n.Tr "repo.metadata.label.filter_sort.mostreleases"}}</a>
+            <a class="{{if eq .SortType "fewestreleases"}}active{{end}} item" href="{{$.Link}}?sort=fewestreleases&q={{$.Keyword}}">{{.i18n.Tr "repo.metadata.label.filter_sort.fewestreleases"}}</a>
+            <a class="{{if eq .SortType "moststars"}}active{{end}} item" href="{{$.Link}}?sort=moststars&q={{$.Keyword}}">{{.i18n.Tr "repo.issues.filter_sort.moststars"}}</a>
+            <a class="{{if eq .SortType "feweststars"}}active{{end}} item" href="{{$.Link}}?sort=feweststars&q={{$.Keyword}}">{{.i18n.Tr "repo.issues.filter_sort.feweststars"}}</a>
+            <a class="{{if eq .SortType "mostforks"}}active{{end}} item" href="{{$.Link}}?sort=mostforks&q={{$.Keyword}}">{{.i18n.Tr "repo.issues.filter_sort.mostforks"}}</a>
+            <a class="{{if eq .SortType "fewestforks"}}active{{end}} item" href="{{$.Link}}?sort=fewestforks&q={{$.Keyword}}">{{.i18n.Tr "repo.issues.filter_sort.fewestforks"}}</a>
+        </div>
+    </div>
+</div>
+<form class="ui form ignore-dirty" style="max-width: 90%">
+    <input type="hidden" name="tab" value="{{$.TabName}}">
+    <input type="hidden" name="sort" value="{{$.SortType}}">
+    <div class="ui fluid action input">
+        <input name="q" value="{{.Keyword}}" placeholder="{{.i18n.Tr "explore.search"}}..." autofocus>
+        <button class="ui blue button">{{.i18n.Tr "explore.search"}}</button>
+        {{template "catalog/info_icon" .}}
+    </div>
+</form>
+<div class="ui divider"></div>

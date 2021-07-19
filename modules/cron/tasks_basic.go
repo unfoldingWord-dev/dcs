@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"code.gitea.io/gitea/models"
+	metadata_service "code.gitea.io/gitea/modules/door43metadata"
 	"code.gitea.io/gitea/modules/migrations"
 	repository_service "code.gitea.io/gitea/modules/repository"
 	"code.gitea.io/gitea/modules/setting"
@@ -23,6 +24,16 @@ func registerUpdateMirrorTask() {
 		NoSuccessNotice: true,
 	}, func(ctx context.Context, _ *models.User, _ Config) error {
 		return mirror_service.Update(ctx)
+	})
+}
+
+func registerUpdateDoor43MetadataTask() {
+	RegisterTaskFatal("update_metadata", &BaseConfig{
+		Enabled:    false,
+		RunAtStart: false,
+		Schedule:   "@every 2h",
+	}, func(ctx context.Context, _ *models.User, _ Config) error {
+		return metadata_service.UpdateDoor43Metadata(ctx)
 	})
 }
 
@@ -132,6 +143,7 @@ func initBasicTasks() {
 	registerArchiveCleanup()
 	registerSyncExternalUsers()
 	registerDeletedBranchesCleanup()
+	registerUpdateDoor43MetadataTask()
 	if !setting.Repository.DisableMigrations {
 		registerUpdateMigrationPosterID()
 	}

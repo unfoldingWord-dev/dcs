@@ -15,6 +15,10 @@ type Organization struct {
 	Location                  string `json:"location"`
 	Visibility                string `json:"visibility"`
 	RepoAdminChangeTeamAccess bool   `json:"repo_admin_change_team_access"`
+	/*** DCS Customizations ***/
+	RepoLanguages []string `json:"repo_languages"`
+	RepoSubjects  []string `json:"repo_subjects"`
+	/*** END DCS Customizations ***/
 }
 
 // CreateOrgOption options for creating an organization

@@ -28,6 +28,7 @@ import (
 	"code.gitea.io/gitea/modules/log"
 	"code.gitea.io/gitea/modules/markup"
 	"code.gitea.io/gitea/modules/setting"
+	"code.gitea.io/gitea/modules/yaml" // DCS Customizations
 )
 
 const (
@@ -368,6 +369,18 @@ func renderDirectory(ctx *context.Context, treeLink string) {
 		ctx.Data["CanUploadFile"] = setting.Repository.Upload.Enabled && !ctx.Repo.Repository.IsArchived
 	}
 
+	/*** DCS Customizations ***/
+	if ctx.Repo.TreePath == "" {
+		if entry, _ := tree.GetTreeEntryByPath("manifest.yaml"); entry != nil {
+			if result, err := base.ValidateManifestTreeEntry(entry); err != nil {
+				fmt.Printf("ValidateManifestTreeEntry: %v\n", err)
+			} else {
+				ctx.Data["ValidateManifestResult"] = result
+				ctx.Data["ValidateManifestResultErrors"] = base.StringifyValidationErrors(result)
+			}
+		}
+	}
+	/*** END DCS Customizations ***/
 	ctx.Data["SSHDomain"] = setting.SSH.Domain
 }
 
@@ -485,10 +498,26 @@ func renderFile(ctx *context.Context, entry *git.TreeEntry, treeLink, rawLink st
 		buf = charset.ToUTF8WithFallback(append(buf, d...))
 		readmeExist := markup.IsReadmeFile(blob.Name())
 		ctx.Data["ReadmeExist"] = readmeExist
+		/*** DCS Customizations ***/
+		isTocYaml := blob.Name() == "toc.yaml"
+		ctx.Data["IsTocreaYaml"] = isTocYaml
+		/*** END DCS Customizations ***/
 		if markupType := markup.Type(blob.Name()); markupType != "" {
 			ctx.Data["IsMarkup"] = true
 			ctx.Data["MarkupType"] = markupType
 			ctx.Data["FileContent"] = string(markup.Render(blob.Name(), buf, path.Dir(treeLink), ctx.Repo.Repository.ComposeDocumentMetas()))
+			/*** DCS Customizations ***/
+		} else if isTocYaml {
+			ctx.Data["IsRenderedHTML"] = true
+			if rendered, err := yaml.Render(buf); err != nil {
+				log.Error("RenderYaml: %v", err)
+				ctx.Flash.ErrorMsg = fmt.Sprintf("Unable to parse %v", err)
+				ctx.Data["Flash"] = ctx.Flash
+				ctx.Data["FileContent"] = string(buf)
+			} else {
+				ctx.Data["FileContent"] = string(rendered)
+			}
+			/*** END DCS Customizations ***/
 		} else if readmeExist {
 			ctx.Data["IsRenderedHTML"] = true
 			ctx.Data["FileContent"] = strings.ReplaceAll(
@@ -704,6 +733,11 @@ func renderCode(ctx *context.Context) {
 	ctx.Data["TreeLink"] = treeLink
 	ctx.Data["TreeNames"] = treeNames
 	ctx.Data["BranchLink"] = branchLink
+
+	/*** DCS Customizations ***/
+	ctx.Data["Entry"] = entry
+	/*** END DCS Customizations ***/
+
 	ctx.HTML(200, tplRepoHome)
 }
 

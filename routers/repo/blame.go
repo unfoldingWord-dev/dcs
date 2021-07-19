@@ -184,6 +184,10 @@ func RefBlame(ctx *context.Context) {
 
 	renderBlame(ctx, blameParts, commitNames)
 
+	/*** DCS Customizations ***/
+	ctx.Data["Entry"] = entry
+	/*** END DCS Customizations ***/
+
 	ctx.HTML(200, tplBlame)
 }
 

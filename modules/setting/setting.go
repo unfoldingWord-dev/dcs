@@ -409,6 +409,13 @@ var (
 	// UILocation is the location on the UI, so that we can display the time on UI.
 	// Currently only show the default time.Local, it could be added to app.ini after UI is ready
 	UILocation = time.Local
+
+	/*** DCS Customizations ***/
+	DCS struct {
+		GATrackingID     string
+		Door43PreviewURL string
+	}
+	/*** END DCS Customizations ***/
 )
 
 // IsProd if it's a production mode
@@ -980,6 +987,11 @@ func NewContext() {
 	UI.DefaultShowFullName = Cfg.Section("ui").Key("DEFAULT_SHOW_FULL_NAME").MustBool(false)
 	UI.SearchRepoDescription = Cfg.Section("ui").Key("SEARCH_REPO_DESCRIPTION").MustBool(true)
 	UI.UseServiceWorker = Cfg.Section("ui").Key("USE_SERVICE_WORKER").MustBool(true)
+
+	/*** DCS Customizations ***/
+	DCS.GATrackingID = Cfg.Section("dcs").Key("GA_TRACKING_ID").MustString("UA-60106521-5")
+	DCS.Door43PreviewURL = Cfg.Section("dcs").Key("DOOR43_PREVIEW_URL").MustString("https://door43.org")
+	/*** END DCS Customizations ***/
 
 	HasRobotsTxt, err = util.IsFile(path.Join(CustomPath, "robots.txt"))
 	if err != nil {

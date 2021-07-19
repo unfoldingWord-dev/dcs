@@ -1,0 +1,49 @@
+{
+    "completion": 7,
+    "currentsource": 0,
+    "icon": "uw-project-icon:uw-project-icon",
+    "language": {
+        "direction": "ltr",
+        "id": 6058,
+        "lc": "te",
+        "ln": "\u0c24\u0c46\u0c32\u0c41\u0c17\u0c41",
+        "region": "Asia"
+    },
+    "project": {
+        "category": "Bible: NT",
+        "desc": "",
+        "id": 39,
+        "name": "John",
+        "slug": "jhn"
+    },
+    "sources": [
+        {
+            "date_modified": 20151217,
+            "id": 144,
+            "lc": "en",
+            "level": 3,
+            "ln": "English",
+            "name": "Unlocked Dynamic Bible",
+            "project": "jhn",
+            "source": "udb",
+            "version": "3"
+        }
+    ],
+    "translators": [
+        {
+            "name": "M XXXXX"
+        },
+        {
+            "name": "Gerxxxx"
+        },
+        {
+            "name": "Ashok Kxxxxxx"
+        },
+        {
+            "name": "Asecwxxxxxxxx"
+        },
+        {
+            "name": "Rev. G Vixxxxxx"
+        }
+    ]
+}

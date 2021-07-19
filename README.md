@@ -3,7 +3,7 @@
     <img alt="Gitea" src="https://raw.githubusercontent.com/go-gitea/gitea/master/public/img/gitea.svg" width="220"/>
   </a>
 </p>
-<h1 align="center">Gitea - Git with a cup of tea</h1>
+<h1 align="center">Gitea - Git with a cup of tea - DCS Version</h1>
 
 <p align="center">
   <a href="https://drone.gitea.io/go-gitea/gitea" title="Build Status">

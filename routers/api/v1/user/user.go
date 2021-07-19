@@ -34,6 +34,10 @@ func Search(ctx *context.APIContext) {
 	//   description: ID of the user to search for
 	//   type: integer
 	//   format: int64
+	// - name: lang
+	//   in: query
+	//   description: If the user has one or more repos with the given language(s), the org will be in the results. Multiple lang's are ORed.
+	//   type: string
 	// - name: page
 	//   in: query
 	//   description: page number of results to return (1-based)
@@ -62,6 +66,9 @@ func Search(ctx *context.APIContext) {
 		UID:         ctx.QueryInt64("uid"),
 		Type:        models.UserTypeIndividual,
 		ListOptions: listOptions,
+		/*** DCS Customizations ***/
+		RepoLanguages: ctx.QueryStrings("lang"),
+		/*** END DCS Customizations ***/
 	}
 
 	users, maxResults, err := models.SearchUsers(opts)
@@ -75,7 +82,9 @@ func Search(ctx *context.APIContext) {
 
 	results := make([]*api.User, len(users))
 	for i := range users {
-		results[i] = convert.ToUser(users[i], ctx.IsSigned, ctx.User != nil && ctx.User.IsAdmin)
+		/*** DCS Customizations ***/
+		results[i] = convert.ToUserDCS(users[i], ctx.IsSigned, ctx.User != nil && ctx.User.IsAdmin)
+		/*** END DCS Customizations ***/
 	}
 
 	ctx.SetLinkHeader(int(maxResults), listOptions.PageSize)
@@ -112,7 +121,9 @@ func GetInfo(ctx *context.APIContext) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, convert.ToUser(u, ctx.IsSigned, ctx.User != nil && (ctx.User.ID == u.ID || ctx.User.IsAdmin)))
+	/*** DCS Customizations ***/
+	ctx.JSON(http.StatusOK, convert.ToUserDCS(u, ctx.IsSigned, ctx.User != nil && (ctx.User.ID == u.ID || ctx.User.IsAdmin)))
+	/*** END DCS Customizations ***/
 }
 
 // GetAuthenticatedUser get current user's information
@@ -126,7 +137,9 @@ func GetAuthenticatedUser(ctx *context.APIContext) {
 	//   "200":
 	//     "$ref": "#/responses/User"
 
-	ctx.JSON(http.StatusOK, convert.ToUser(ctx.User, ctx.IsSigned, ctx.User != nil))
+	/*** DCS Customizations ***/
+	ctx.JSON(http.StatusOK, convert.ToUserDCS(ctx.User, ctx.IsSigned, ctx.User != nil))
+	/*** END DCS Customizations ***/
 }
 
 // GetUserHeatmapData is the handler to get a users heatmap

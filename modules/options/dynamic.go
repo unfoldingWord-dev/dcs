@@ -90,6 +90,11 @@ func Labels(name string) ([]byte, error) {
 	return fileFromDir(path.Join("label", name))
 }
 
+// Schemas reads the content of a specific schema from static or custom path.
+func Schemas(name string) ([]byte, error) {
+	return fileFromDir(path.Join("schema", name))
+}
+
 // fileFromDir is a helper to read files from static or custom path.
 func fileFromDir(name string) ([]byte, error) {
 	customPath := path.Join(setting.CustomPath, "options", name)

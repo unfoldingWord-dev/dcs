@@ -1,0 +1,36 @@
+{
+  "package_version": 0.1,
+  "modified_at": "20161116000000",
+  "content_mime_type": "text/markdown",
+  "versification_slug": "ufw",
+  "language": {
+    "name": "Oriya",
+    "dir": "ltr",
+    "slug": "or"
+  },
+  "resource": {
+    "name": "Open Bible Stories",
+    "type": "book",
+    "status": {
+      "translate_mode": "all",
+      "version": "4.1",
+      "checking_entity": [
+        "translation team"
+      ],
+      "source_translations": [
+        {
+          "language_slug": "en",
+          "resource_slug": "obs",
+          "version": "3.2.1"
+        }
+      ],
+      "checks_performed": [],
+      "pub_date": "2015-10-28",
+      "license": "CC BY-SA",
+      "checking_level": "1",
+      "comments": ""
+    },
+    "slug": "obs"
+  },
+  "chunk_status": []
+}

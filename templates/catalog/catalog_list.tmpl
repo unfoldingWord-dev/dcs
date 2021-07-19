@@ -1,0 +1,50 @@
+<div class="ui repository list">
+	{{range .Door43Metadatas}}
+		<div class="item">
+			<div class="ui header">
+				{{if .Repo.RelAvatarLink}}
+					<img class="ui avatar image" src="{{.Repo.RelAvatarLink}}">
+				{{end}}
+				{{if .Release}}
+				<a class="name" href="{{.Repo.Link}}/releases/tag/{{.Release.TagName | EscapePound}}">
+				{{else}}
+				<a class="name" href="{{.Repo.Link}}/src/branch/{{.Repo.DefaultBranch | EscapePound}}">
+				{{end}}
+					{{.Metadata.dublin_core.title}}
+				</a>
+				{{if .Repo.IsFork}}
+					<span class="middle">{{svg "octicon-repo-forked" 16}}</span>
+				{{else if .Repo.IsMirror}}
+					<span class="middle">{{svg "octicon-repo-clone" 16}}</span>
+				{{end}}
+				{{if .Release}}
+					{{if .Release.IsDraft}}
+					<span class="ui yellow label" title="Catalog: Draft">
+					{{else if .Release.IsPrerelease}}
+					<span class="ui orange label" title="Catalog: Pre-Production">
+					{{else}}
+					<span class="ui green label" title="Catalog: Production">
+					{{end}}
+						{{.Release.TagName}}
+					</span>
+				{{end}}
+				<div class="ui right metas">
+					<span class="text grey" title="# stars">{{svg "octicon-star" 16}} {{.Repo.NumStars}}</span>
+					<span class="text grey" title="# forks">{{svg "octicon-git-branch" 16}} {{.Repo.NumForks}}</span>
+					<span class="text grey" title="# releases">{{svg "octicon-tag" 16}} {{.GetReleaseCount}}</span>
+				</div>
+			</div>
+			<div class="description">
+				<p>{{.Metadata.dublin_core.subject}}</p>
+				{{if .Release}}
+				<p class="time">{{$.i18n.Tr "explore.released"}}: {{.ReleaseDateUnix.FormatDate}}</p>
+				{{end}}
+				<p class="time">{{$.i18n.Tr "explore.language"}}: {{.Metadata.dublin_core.language.title}} ({{.Metadata.dublin_core.language.identifier}})</p>
+			</div>
+		</div>
+	{{else}}
+	<div>
+		{{$.i18n.Tr "explore.repo_no_results"}}
+	</div>
+	{{end}}
+</div>

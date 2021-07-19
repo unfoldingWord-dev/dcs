@@ -68,7 +68,31 @@
 								</a>
 							{{else}}
 								{{svg (printf "octicon-%s" (EntryIcon $entry))}}
-								<a href="{{EscapePound $.TreeLink}}/{{EscapePound $entry.Name}}" title="{{$entry.Name}}">{{$entry.Name}}</a>
+								<a href="{{EscapePound $.TreeLink}}/{{EscapePound $entry.Name}}" title="{{$entry.Name}}">{{$entry.Name}}
+									<!-- DCS Customizations -->
+									{{if or (StringHasSuffix $entry.Name ".yaml") (StringHasSuffix $entry.Name ".json")}}
+										{{$errors := ""}}
+										{{$message := $.i18n.Tr "repo.metadata.valid"}}
+										{{if StringHasSuffix $entry.Name ".yaml"}}
+											{{$errors = ValidateYAMLFile $entry}}
+											{{if and (eq $errors "") (eq $.TreePath "") (eq $entry.Name "manifest.yaml")}}
+											    {{$errors = ValidateManifestFile $entry}}
+											    {{$message = $.i18n.Tr "repo.metadata.valid_manifest_tooltip"}}
+											{{end}}
+										{{end}}
+										{{if StringHasSuffix $entry.Name ".json"}}
+											{{$errors = ValidateJSONFile $entry}}
+										{{end}}
+										{{if eq $errors ""}}
+											{{if and (eq $errors "") (eq $.TreePath "") (eq $entry.Name "manifest.yaml")}}
+											<span class="ui label green" title="{{$message}}" style="margin-left: 5px">{{$.i18n.Tr "repo.metadata.valid"}}</span>
+											{{end}}
+										{{else}}
+											<span class="ui label red" title="{{$errors}}" style="margin-left: 5px">{{$.i18n.Tr "repo.metadata.invalid"}}</span>
+										{{end}}
+									{{end}}
+									<!-- END DCS Customizations -->
+								</a>
 							{{end}}
 						{{end}}
 					</span>

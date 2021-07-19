@@ -58,5 +58,11 @@ type Notifier interface {
 	NotifySyncCreateRef(doer *models.User, repo *models.Repository, refType, refFullName string)
 	NotifySyncDeleteRef(doer *models.User, repo *models.Repository, refType, refFullName string)
 
+	/*** DCS Customizations ***/
+	NotifyNewDoor43Metadata(doer *models.User, repo *models.Repository, refType, refFullName string)
+	NotifyUpdateDoor43Metadata(doer *models.User, repo *models.Repository, refType, refFullName string)
+	NotifyDeleteDoor43Metadata(doer *models.User, repo *models.Repository, refType, refFullName string)
+	/*** END DCS Customizations ***/
+
 	NotifyRepoPendingTransfer(doer, newOwner *models.User, repo *models.Repository)
 }

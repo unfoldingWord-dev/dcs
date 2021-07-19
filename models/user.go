@@ -1567,6 +1567,9 @@ type SearchUserOptions struct {
 	Actor         *User // The user doing the search
 	IsActive      util.OptionalBool
 	SearchByEmail bool // Search by email as well as username/full name
+	/*** DCS CUSTOMIZATIONS ***/
+	RepoLanguages []string // Find users that have the given language id in a repo's manifest
+	/*** END DCS CUSTOMIZATIONS ***/
 }
 
 func (opts *SearchUserOptions) toConds() builder.Cond {
@@ -1633,12 +1636,26 @@ func SearchUsers(opts *SearchUserOptions) (users []*User, _ int64, _ error) {
 	}
 
 	if len(opts.OrderBy) == 0 {
-		opts.OrderBy = SearchOrderByAlphabetically
+		opts.OrderBy = SearchUserOrderByAlphabetically
 	}
 
 	sess := x.Where(cond).OrderBy(opts.OrderBy.String())
 	if opts.Page != 0 {
 		sess = opts.setSessionPagination(sess)
+	}
+
+	if len(opts.RepoLanguages) > 0 {
+		var langCond = builder.NewCond()
+		for _, lang := range opts.RepoLanguages {
+			for _, v := range strings.Split(lang, ",") {
+				langCond = langCond.Or(builder.Eq{"LOWER(REPLACE(JSON_EXTRACT(`door43_metadata`.metadata, '$.dublin_core.language.identifier'), '\"', ''))": strings.ToLower(v)})
+			}
+		}
+		metadataSelect := builder.Select("owner_id").
+			From("repository").
+			Join("INNER", "`door43_metadata`", "repo_id = `repository`.id").
+			Where(langCond)
+		sess.In("`user`.id", metadataSelect)
 	}
 
 	users = make([]*User, 0, opts.PageSize)

@@ -1,0 +1,21 @@
+<span id="search-info-icon" class="ui text grey"
+  style="position: absolute; right: 90px; top: 10px; font-size: 1.2em;"
+  data-html='<pre style="text-align:left">Catalog search is case insensitive.
+Multiple phrases/fields can be used by separating them with a comma and a space.
+The following fields can be used to search specific metadata:
+    <em>subject:, lang:, book:, owner:, repo:, tag:, and checkinglevel:</em>
+    Example: <em>subject:obs study notes, lang:en,fr, Larry</em>
+             Returns all "OBS Study Notes" entries that are in English & French 
+             with the keyword "Larry" (matches "contributor")
+Wildcards: Use _ for any character
+           % for any # of characters
+           Use \_ and \% to search for literal _ and %</pre>' data-variation="wide">
+  <i class="ui fa fa-question-circle-o"></i>
+</span>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+	$(document).ready(() => {
+		$('#search-info-icon').popup();
+	});
+</script>

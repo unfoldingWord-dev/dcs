@@ -27,8 +27,10 @@ import (
 	"code.gitea.io/gitea/modules/web"
 	"code.gitea.io/gitea/routers"
 	"code.gitea.io/gitea/routers/admin"
+	"code.gitea.io/gitea/routers/api/catalog" // DCS Customizations
 	apiv1 "code.gitea.io/gitea/routers/api/v1"
 	"code.gitea.io/gitea/routers/api/v1/misc"
+	"code.gitea.io/gitea/routers/dcs" // DCS Customizations
 	"code.gitea.io/gitea/routers/dev"
 	"code.gitea.io/gitea/routers/events"
 	"code.gitea.io/gitea/routers/org"
@@ -117,6 +119,9 @@ func NormalRoutes() *web.Route {
 		r.Use(middle)
 	}
 
+	/*** DCS Customizations ***/
+	catalog.AllRoutes(r)
+	/*** END DCS Customizations ***/
 	r.Mount("/", WebRoutes())
 	r.Mount("/api/v1", apiv1.Routes())
 	r.Mount("/api/internal", private.Routes())
@@ -221,6 +226,9 @@ func WebRoutes() *web.Route {
 	if setting.API.EnableSwagger {
 		// Note: The route moved from apiroutes because it's in fact want to render a web page
 		r.Get("/api/swagger", misc.Swagger) // Render V1 by default
+		/*** DCS Customizations ***/
+		r.Get("/api/catalog/swagger", catalog.Swagger)
+		/*** END DCS Customizations ***/
 	}
 
 	RegisterRoutes(r)
@@ -1076,7 +1084,15 @@ func RegisterRoutes(m *web.Route) {
 
 	if setting.API.EnableSwagger {
 		m.Get("/swagger.v1.json", routers.SwaggerV1Json)
+		m.Get("/swagger.catalog.json", routers.SwaggerCatalogJSON)
 	}
+
+	/*** DCS Customizations ***/
+	m.Get("/about", dcs.About)
+	m.Group("/catalog", func() {
+		m.Get("", dcs.Catalog)
+	}, ignSignIn)
+	/*** END DCS Customizations ***/
 
 	// Not found handler.
 	m.NotFound(web.Wrap(routers.NotFound))

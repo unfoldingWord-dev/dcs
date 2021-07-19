@@ -102,6 +102,12 @@ func NewFuncMap() []template.FuncMap {
 		"Subtract":      base.Subtract,
 		"EntryIcon":     base.EntryIcon,
 		"MigrationIcon": MigrationIcon,
+		/*** DCS Customizations ***/
+		"StringHasSuffix":      base.StringHasSuffix,
+		"ValidateJSONFile":     base.ValidateJSONFile,
+		"ValidateYAMLFile":     base.ValidateYAMLFile,
+		"ValidateManifestFile": base.ValidateManifestFile,
+		/*** END DCS Customizations ***/
 		"Add": func(a ...int) int {
 			sum := 0
 			for _, val := range a {
@@ -204,6 +210,14 @@ func NewFuncMap() []template.FuncMap {
 			}
 			return "tab-size-8"
 		},
+		/*** DCS Customizations ***/
+		"GATrackingID": func() string {
+			return setting.DCS.GATrackingID
+		},
+		"Door43PreviewURL": func() string {
+			return setting.DCS.Door43PreviewURL
+		},
+		/*** END DCS Customizations ***/
 		"SubJumpablePath": func(str string) []string {
 			var path []string
 			index := strings.LastIndex(str, "/")

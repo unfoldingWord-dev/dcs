@@ -238,19 +238,46 @@ func Profile(ctx *context.Context) {
 			return
 		}
 	default:
+		/*** DCS Customizations ***/
+		var books, langs, keywords, subjects, repoNames, owners []string
+		if keyword != "" {
+			for _, token := range models.SplitAtCommaNotInString(keyword, true) {
+				if strings.HasPrefix(token, "book:") {
+					books = append(books, strings.TrimPrefix(token, "book:"))
+				} else if strings.HasPrefix(token, "lang:") {
+					langs = append(langs, strings.TrimPrefix(token, "lang:"))
+				} else if strings.HasPrefix(token, "subject:") {
+					subjects = append(subjects, strings.Trim(strings.TrimPrefix(token, "subject:"), `"`))
+				} else if strings.HasPrefix(token, "repo:") {
+					repoNames = append(repoNames, strings.TrimPrefix(token, "repo:"))
+				} else if strings.HasPrefix(token, "owner:") {
+					owners = append(owners, strings.TrimPrefix(token, "owner:"))
+				} else {
+					keywords = append(keywords, token)
+				}
+			}
+		}
+		/*** END DCS Customizations ***/
+
 		repos, count, err = models.SearchRepository(&models.SearchRepoOptions{
 			ListOptions: models.ListOptions{
 				PageSize: setting.UI.User.RepoPagingNum,
 				Page:     page,
 			},
 			Actor:              ctx.User,
-			Keyword:            keyword,
+			Keyword:            strings.Join(keywords, ", "),
 			OwnerID:            ctxUser.ID,
 			OrderBy:            orderBy,
 			Private:            ctx.IsSigned,
 			Collaborate:        util.OptionalBoolFalse,
 			TopicOnly:          topicOnly,
 			IncludeDescription: setting.UI.SearchRepoDescription,
+			Books:              books,
+			Languages:          langs,
+			Subjects:           subjects,
+			Repos:              repoNames,
+			Owners:             owners,
+			IncludeMetadata:    true,
 		})
 		if err != nil {
 			ctx.ServerError("SearchRepository", err)

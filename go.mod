@@ -4,13 +4,13 @@ go 1.14
 
 require (
 	cloud.google.com/go v0.78.0 // indirect
-	code.gitea.io/gitea-vet v0.2.1
 	code.gitea.io/sdk/gitea v0.14.0
 	gitea.com/go-chi/binding v0.0.0-20210301195521-1fe1c9a555e7
 	gitea.com/go-chi/cache v0.0.0-20210110083709-82c4c9ce2d5e
 	gitea.com/go-chi/captcha v0.0.0-20210110083842-e7696c336a1e
 	gitea.com/go-chi/session v0.0.0-20210108030337-0cb48c5ba8ee
 	gitea.com/lunny/levelqueue v0.3.0
+	gitea.com/unfoldingword/gitea-vet v0.2.5
 	github.com/Microsoft/go-winio v0.4.16 // indirect
 	github.com/NYTimes/gziphandler v1.1.1
 	github.com/PuerkitoBio/goquery v1.5.1
@@ -34,6 +34,7 @@ require (
 	github.com/editorconfig/editorconfig-core-go/v2 v2.4.1
 	github.com/emirpasic/gods v1.12.0
 	github.com/ethantkoenig/rupture v1.0.0
+	github.com/ghodss/yaml v1.0.0
 	github.com/gliderlabs/ssh v0.3.2
 	github.com/glycerine/go-unsnap-stream v0.0.0-20210130063903-47dfef350d96 // indirect
 	github.com/go-asn1-ber/asn1-ber v1.5.3 // indirect
@@ -92,6 +93,7 @@ require (
 	github.com/minio/minio-go/v7 v7.0.10
 	github.com/minio/sha256-simd v1.0.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
+	github.com/mitchellh/mapstructure v1.4.1
 	github.com/mrjones/oauth v0.0.0-20190623134757-126b35219450 // indirect
 	github.com/msteinert/pam v0.0.0-20201130170657-e61372126161
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
@@ -127,6 +129,7 @@ require (
 	github.com/willf/bitset v1.1.11 // indirect
 	github.com/xanzy/go-gitlab v0.44.0
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
+	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/yohcop/openid-go v1.0.0
 	github.com/yuin/goldmark v1.3.3
 	github.com/yuin/goldmark-highlighting v0.0.0-20200307114337-60d527fdb691

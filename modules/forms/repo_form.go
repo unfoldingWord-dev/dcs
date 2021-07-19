@@ -804,3 +804,28 @@ func (f *DeadlineForm) Validate(req *http.Request, errs binding.Errors) binding.
 	ctx := context.GetContext(req)
 	return middleware.Validate(errs, ctx.Data, f, ctx.Locale)
 }
+
+// DOOR43 CUSTOMIZATIONS
+
+// NewDoor43MetadataForm form for creating release
+type NewDoor43MetadataForm struct {
+	TagName  string `form:"tag_name" binding:"MaxSize(255)"`
+	Metadata string `form:"metadata"`
+}
+
+// Validate validates the fields
+func (f *NewDoor43MetadataForm) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+	ctx := context.GetContext(req)
+	return middleware.Validate(errs, ctx.Data, f, ctx.Locale)
+}
+
+// EditDoor43MetadataForm form for changing release
+type EditDoor43MetadataForm struct {
+	Metadata []byte `form:"metadata"`
+}
+
+// Validate validates the fields
+func (f *EditDoor43MetadataForm) Validate(req *http.Request, errs binding.Errors) binding.Errors {
+	ctx := context.GetContext(req)
+	return middleware.Validate(errs, ctx.Data, f, ctx.Locale)
+}
