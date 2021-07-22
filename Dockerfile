@@ -7,7 +7,7 @@ ARG GOPROXY
 ENV GOPROXY ${GOPROXY:-direct}
 
 ARG GITEA_VERSION
-ARG TAGS="sqlite sqlite_unlock_notify"
+ARG TAGS="sqlite sqlite_unlock_notify sqlite_json"
 ENV TAGS "bindata timetzdata $TAGS"
 ARG CGO_EXTRA_CFLAGS
 

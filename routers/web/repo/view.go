@@ -31,6 +31,7 @@ import (
 	"code.gitea.io/gitea/modules/setting"
 	"code.gitea.io/gitea/modules/structs"
 	"code.gitea.io/gitea/modules/typesniffer"
+	"code.gitea.io/gitea/modules/yaml" // DCS Customizations
 )
 
 const (
@@ -388,6 +389,18 @@ func renderDirectory(ctx *context.Context, treeLink string) {
 		ctx.Data["CanUploadFile"] = setting.Repository.Upload.Enabled && !ctx.Repo.Repository.IsArchived
 	}
 
+	/*** DCS Customizations ***/
+	if ctx.Repo.TreePath == "" {
+		if entry, _ := tree.GetTreeEntryByPath("manifest.yaml"); entry != nil {
+			if result, err := base.ValidateManifestTreeEntry(entry); err != nil {
+				fmt.Printf("ValidateManifestTreeEntry: %v\n", err)
+			} else {
+				ctx.Data["ValidateManifestResult"] = result
+				ctx.Data["ValidateManifestResultErrors"] = base.StringifyValidationErrors(result)
+			}
+		}
+	}
+	/*** END DCS Customizations ***/
 	ctx.Data["SSHDomain"] = setting.SSH.Domain
 }
 
@@ -507,6 +520,10 @@ func renderFile(ctx *context.Context, entry *git.TreeEntry, treeLink, rawLink st
 		rd := charset.ToUTF8WithFallbackReader(io.MultiReader(bytes.NewReader(buf), dataRc))
 		readmeExist := markup.IsReadmeFile(blob.Name())
 		ctx.Data["ReadmeExist"] = readmeExist
+		/*** DCS Customizations ***/
+		isTocYaml := blob.Name() == "toc.yaml"
+		ctx.Data["IsTocreaYaml"] = isTocYaml
+		/*** END DCS Customizations ***/
 		if markupType := markup.Type(blob.Name()); markupType != "" {
 			ctx.Data["IsMarkup"] = true
 			ctx.Data["MarkupType"] = markupType
@@ -523,6 +540,18 @@ func renderFile(ctx *context.Context, entry *git.TreeEntry, treeLink, rawLink st
 				return
 			}
 			ctx.Data["FileContent"] = result.String()
+			/*** DCS Customizations ***/
+		} else if isTocYaml {
+			ctx.Data["IsRenderedHTML"] = true
+			if rendered, err := yaml.Render(buf); err != nil {
+				log.Error("RenderYaml: %v", err)
+				ctx.Flash.ErrorMsg = fmt.Sprintf("Unable to parse %v", err)
+				ctx.Data["Flash"] = ctx.Flash
+				ctx.Data["FileContent"] = string(buf)
+			} else {
+				ctx.Data["FileContent"] = string(rendered)
+			}
+			/*** END DCS Customizations ***/
 		} else if readmeExist {
 			buf, _ := ioutil.ReadAll(rd)
 			ctx.Data["IsRenderedHTML"] = true
@@ -751,6 +780,11 @@ func renderCode(ctx *context.Context) {
 	ctx.Data["TreeLink"] = treeLink
 	ctx.Data["TreeNames"] = treeNames
 	ctx.Data["BranchLink"] = branchLink
+
+	/*** DCS Customizations ***/
+	ctx.Data["Entry"] = entry
+	/*** END DCS Customizations ***/
+
 	ctx.HTML(http.StatusOK, tplRepoHome)
 }
 

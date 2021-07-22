@@ -13,8 +13,8 @@
   ],
   "swagger": "2.0",
   "info": {
-    "description": "This documentation describes the Gitea API.",
-    "title": "Gitea API.",
+    "description": "This documentation describes the DCS (Gitea) API.",
+    "title": "DCS (Gitea) API.",
     "license": {
       "name": "MIT",
       "url": "http://opensource.org/licenses/MIT"
@@ -97,6 +97,12 @@
         "summary": "List all organizations",
         "operationId": "adminGetAllOrgs",
         "parameters": [
+          {
+            "type": "string",
+            "description": "If the org has one or more repos with the given language(s), the org will be in the results. Multiple lang's are ORed.",
+            "name": "lang",
+            "in": "query"
+          },
           {
             "type": "integer",
             "description": "page number of results to return (1-based)",
@@ -244,6 +250,12 @@
         "summary": "List all users",
         "operationId": "adminGetAllUsers",
         "parameters": [
+          {
+            "type": "string",
+            "description": "If the user has one or more repos with the given language(s), the org will be in the results. Multiple lang's are ORed.",
+            "name": "lang",
+            "in": "query"
+          },
           {
             "type": "integer",
             "description": "page number of results to return (1-based)",
@@ -887,6 +899,12 @@
         "summary": "Get list of organizations",
         "operationId": "orgGetAll",
         "parameters": [
+          {
+            "type": "string",
+            "description": "If the org has one or more repos with the given language(s), the org will be in the results. Multiple lang's are ORed.",
+            "name": "lang",
+            "in": "query"
+          },
           {
             "type": "integer",
             "description": "page number of results to return (1-based)",
@@ -2019,7 +2037,7 @@
           },
           {
             "type": "boolean",
-            "description": "include search of keyword within repository description",
+            "description": "include search of keyword within repository description (defaults to false)",
             "name": "includeDesc",
             "in": "query"
           },
@@ -2085,6 +2103,42 @@
             "type": "boolean",
             "description": "if `uid` is given, search only for repos that the user owns",
             "name": "exclusive",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "name of the repo. Multiple repo's are ORed.",
+            "name": "repo",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "owner of the repo. Multiple owner's are ORed.",
+            "name": "owner",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "If the repo is a resource of the given language(s), the repo will be in the results. Multiple lang's are ORed.",
+            "name": "lang",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "resource subject. Multiple subject's are ORed.",
+            "name": "subject",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "book (project id) that exist in a resource. If the resource contains the the book, its repository will be included in the results. Multiple book's are ORed.",
+            "name": "book",
+            "in": "query"
+          },
+          {
+            "type": "boolean",
+            "description": "if false, q value will only be searched for in the repo name, owner, description and title and subject; otherwise search all values of the manifest file. (defaults to false)",
+            "name": "includeMetadata",
             "in": "query"
           },
           {
@@ -11424,6 +11478,12 @@
             "in": "query"
           },
           {
+            "type": "string",
+            "description": "If the user has one or more repos with the given language(s), the org will be in the results. Multiple lang's are ORed.",
+            "name": "lang",
+            "in": "query"
+          },
+          {
             "type": "integer",
             "description": "page number of results to return (1-based)",
             "name": "page",
@@ -12331,6 +12391,52 @@
           "type": "string",
           "format": "date-time",
           "x-go-name": "Updated"
+        }
+      },
+      "x-go-package": "code.gitea.io/gitea/modules/structs"
+    },
+    "CatalogStage": {
+      "description": "CatalogStage a repo's catalog stage metadata",
+      "type": "object",
+      "properties": {
+        "branch_or_tag_name": {
+          "type": "string",
+          "x-go-name": "Tag"
+        },
+        "release_url": {
+          "type": "string",
+          "x-go-name": "ReleaseURL"
+        },
+        "released": {
+          "type": "string",
+          "x-go-name": "Released"
+        },
+        "tarball_url": {
+          "type": "string",
+          "x-go-name": "TarballURL"
+        },
+        "zipball_url": {
+          "type": "string",
+          "x-go-name": "ZipballURL"
+        }
+      },
+      "x-go-package": "code.gitea.io/gitea/modules/structs"
+    },
+    "CatalogStages": {
+      "description": "CatalogStages a repo's catalog stages",
+      "type": "object",
+      "properties": {
+        "draft": {
+          "$ref": "#/definitions/CatalogStage"
+        },
+        "latest": {
+          "$ref": "#/definitions/CatalogStage"
+        },
+        "preprod": {
+          "$ref": "#/definitions/CatalogStage"
+        },
+        "prod": {
+          "$ref": "#/definitions/CatalogStage"
         }
       },
       "x-go-package": "code.gitea.io/gitea/modules/structs"
@@ -15591,6 +15697,21 @@
           "type": "boolean",
           "x-go-name": "RepoAdminChangeTeamAccess"
         },
+        "repo_languages": {
+          "description": "DCS Customizations ***/",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "RepoLanguages"
+        },
+        "repo_subjects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "RepoSubjects"
+        },
         "username": {
           "type": "string",
           "x-go-name": "UserName"
@@ -16267,6 +16388,20 @@
           "type": "string",
           "x-go-name": "AvatarURL"
         },
+        "books": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Books"
+        },
+        "catalog": {
+          "$ref": "#/definitions/CatalogStages"
+        },
+        "checking_level": {
+          "type": "string",
+          "x-go-name": "CheckingLevel"
+        },
         "clone_url": {
           "type": "string",
           "x-go-name": "CloneURL"
@@ -16347,6 +16482,10 @@
         "internal_tracker": {
           "$ref": "#/definitions/InternalTracker"
         },
+        "language": {
+          "type": "string",
+          "x-go-name": "Language"
+        },
         "mirror": {
           "type": "boolean",
           "x-go-name": "Mirror"
@@ -16405,9 +16544,17 @@
           "format": "int64",
           "x-go-name": "Stars"
         },
+        "subject": {
+          "type": "string",
+          "x-go-name": "Subject"
+        },
         "template": {
           "type": "boolean",
           "x-go-name": "Template"
+        },
+        "title": {
+          "type": "string",
+          "x-go-name": "Title"
         },
         "updated_at": {
           "type": "string",
@@ -16882,8 +17029,24 @@
           "type": "boolean",
           "x-go-name": "ProhibitLogin"
         },
+        "repo_languages": {
+          "description": "DCS Customizations ***/\nRepo languages",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "RepoLanguages"
+        },
+        "repo_subjects": {
+          "description": "Repo subjects",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "RepoSubjects"
+        },
         "restricted": {
-          "description": "Is user restricted",
+          "description": "END DCS Customizations ***/\nIs user restricted",
           "type": "boolean",
           "x-go-name": "Restricted"
         },

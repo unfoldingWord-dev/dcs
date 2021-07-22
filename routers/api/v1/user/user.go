@@ -33,6 +33,10 @@ func Search(ctx *context.APIContext) {
 	//   description: ID of the user to search for
 	//   type: integer
 	//   format: int64
+	// - name: lang
+	//   in: query
+	//   description: If the user has one or more repos with the given language(s), the org will be in the results. Multiple lang's are ORed.
+	//   type: string
 	// - name: page
 	//   in: query
 	//   description: page number of results to return (1-based)
@@ -57,11 +61,12 @@ func Search(ctx *context.APIContext) {
 	listOptions := utils.GetListOptions(ctx)
 
 	opts := &models.SearchUserOptions{
-		Actor:       ctx.User,
-		Keyword:     strings.Trim(ctx.Query("q"), " "),
-		UID:         ctx.QueryInt64("uid"),
-		Type:        models.UserTypeIndividual,
-		ListOptions: listOptions,
+		Actor:         ctx.User,
+		Keyword:       strings.Trim(ctx.Query("q"), " "),
+		UID:           ctx.QueryInt64("uid"),
+		Type:          models.UserTypeIndividual,
+		ListOptions:   listOptions,
+		RepoLanguages: ctx.QueryStrings("lang"), // DCS Customizations
 	}
 
 	users, maxResults, err := models.SearchUsers(opts)
@@ -79,7 +84,7 @@ func Search(ctx *context.APIContext) {
 
 	ctx.JSON(http.StatusOK, map[string]interface{}{
 		"ok":   true,
-		"data": convert.ToUsers(ctx.User, users),
+		"data": convert.ToUsersDCS(ctx.User, users), // DCS Customizations
 	})
 }
 
@@ -113,7 +118,7 @@ func GetInfo(ctx *context.APIContext) {
 		ctx.NotFound("GetUserByName", models.ErrUserNotExist{Name: ctx.Params(":username")})
 		return
 	}
-	ctx.JSON(http.StatusOK, convert.ToUser(u, ctx.User))
+	ctx.JSON(http.StatusOK, convert.ToUserDCS(u, ctx.User)) // DCS Customizations
 }
 
 // GetAuthenticatedUser get current user's information
@@ -127,7 +132,7 @@ func GetAuthenticatedUser(ctx *context.APIContext) {
 	//   "200":
 	//     "$ref": "#/responses/User"
 
-	ctx.JSON(http.StatusOK, convert.ToUser(ctx.User, ctx.User))
+	ctx.JSON(http.StatusOK, convert.ToUserDCS(ctx.User, ctx.User)) // DCS Customizations
 }
 
 // GetUserHeatmapData is the handler to get a users heatmap

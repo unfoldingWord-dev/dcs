@@ -1,0 +1,539 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$id": "https://resource-container.readthedocs.io/schema/rc.schema.json",
+	"$$target": [
+			"rc.schema.json#/definitions/languageTag",
+			"rc.schema.json#/definitions/localizedText"
+	],
+	"title": "Root",
+	"type": "object",
+	"required": [
+		"dublin_core",
+		"checking",
+		"projects"
+	],
+	"properties": {
+		"dublin_core": {
+			"$id": "#root/dublin_core",
+			"title": "Dublin_core",
+			"type": "object",
+			"required": [
+				"conformsto",
+				"contributor",
+				"creator",
+				"description",
+				"format",
+				"identifier",
+				"issued",
+				"language",
+				"modified",
+				"publisher",
+				"relation",
+				"rights",
+				"source",
+				"subject",
+				"title",
+				"type",
+				"version"
+			],
+			"properties": {
+				"conformsto": {
+					"$id": "#root/dublin_core/conformsto",
+					"title": "Conformsto",
+					"type": "string",
+					"default": "rc0.2",
+					"enum": [
+						"rc0.2"
+					]
+				},
+				"contributor": {
+					"$id": "#root/dublin_core/contributor",
+					"title": "Contributor",
+					"type": "array",
+					"default": [],
+					"items":{
+						"$id": "#root/dublin_core/contributor/items",
+						"title": "Items",
+						"type": "string",
+						"default": "",
+						"examples": [
+							"Alrick G. Headley, M.Div., Th.M."
+						]
+					}
+				},
+				"creator": {
+					"$id": "#root/dublin_core/creator",
+					"title": "Creator",
+					"type": "string",
+					"default": "",
+					"examples": [
+						"unfoldingWord"
+					]
+				},
+				"description": {
+					"$id": "#root/dublin_core/description",
+					"title": "Description",
+					"type": "string",
+					"default": "",
+					"examples": [
+						"An open-licensed update of the ASV, intended to provide a 'form-centric' understanding of the Bible. It increases the translator's understanding of the lexical and grammatical composition of the underlying text by adhering closely to the word order and structure of the originals."
+					]
+				},
+				"format": {
+					"$id": "#root/dublin_core/format",
+					"$ref": "#/definitions/mimeType",
+					"title": "Format",
+					"default": ""
+				},
+				"identifier": {
+					"$id": "#root/dublin_core/identifier",
+					"title": "Identifier",
+					"type": "string",
+					"default": "",
+					"examples": [
+						"ult"
+					],
+					"pattern": "^[a-z][a-z0-9-]"
+				},
+				"issued": {
+					"$id": "#root/dublin_core/issued",
+					"$ref": "#/definitions/timestamp",
+					"title": "Issued",
+					"type": "string",
+					"default": "",
+					"examples": [
+						"2020-03-25"
+					]
+				},
+				"modified": {
+					"$id": "#root/dublin_core/modified",
+					"$ref": "#/definitions/timestamp",
+					"title": "Modified",
+					"type": "string",
+					"default": "",
+					"examples": [
+						"2020-03-25"
+					]
+				},
+				"publisher": {
+					"$id": "#root/dublin_core/publisher",
+					"title": "Publisher",
+					"type": "string",
+					"default": "",
+					"examples": [
+						"unfoldingWord"
+					]
+				},
+				"language": {
+					"$id": "#root/dublin_core/language",
+					"title": "Language",
+					"type": "object",
+					"required": [
+						"direction",
+						"identifier",
+						"title"
+					],
+					"properties": {
+						"identifier": {
+							"$id": "#root/dublin_core/language/identifier",
+							"$ref": "#/definitions/languageTag",
+							"title": "Identifier",
+							"examples": ["en", "hi", "es-419"]
+						},
+						"title": {
+							"$id": "#root/dublin_core/language/title",
+							"title": "Title",
+							"type": "string",
+							"default": ""
+						},
+						"direction": {
+							"$id": "#root/dublin_core/language/direction",
+							"title": "Direction",
+							"type": "string",
+							"default": "ltr",
+							"enum": ["ltr", "rtl"]
+						}
+					}
+				},
+				"relation": {
+					"$id": "#root/dublin_core/relation",
+					"title": "Relation",
+					"type": "array",
+					"default": [],
+					"items":{
+						"$id": "#root/dublin_core/relation/items",
+						"$ref": "#/definitions/relationItem",
+						"title": "Items",
+						"default": "",
+						"examples": [
+							"en/tw"
+						]
+					}
+				},
+				"rights": {
+					"$id": "#root/dublin_core/rights",
+					"title": "Rights",
+					"type": "string",
+					"default": "CC BY-SA 4.0",
+					"enum": [
+						"CC BY 3.0",
+						"CC BY-SA 3.0",
+						"CC BY-SA 4.0",
+						"Free Translate 2.0 International Public License",
+						"Public Domain"
+					]
+				},
+				"source": {
+					"$id": "#root/dublin_core/source",
+					"title": "Source",
+					"type": "array",
+					"default": [],
+					"items":{
+						"$id": "#root/dublin_core/source/items",
+						"title": "Items",
+						"type": "object",
+						"required": [
+							"identifier",
+							"language",
+							"version"
+						],
+						"properties": {
+							"identifier": {
+								"$id": "#root/dublin_core/source/items/identifier",
+								"title": "Identifier",
+								"type": "string",
+								"default": "",
+								"examples": [
+									"asv"
+								],
+								"pattern": "^[a-z][a-z0-9-]"
+							},
+							"language": {
+								"$id": "#root/dublin_core/source/items/language",
+								"$ref": "#/definitions/languageTag",
+								"title": "Language",
+								"default": "",
+								"examples": [
+									"en"
+								]
+							},
+							"version": {
+								"$id": "#root/dublin_core/source/items/version",
+								"title": "Version",
+								"type": "string",
+								"default": "",
+								"examples": [
+									"1901"
+								]
+							}
+						}
+					}
+
+				},
+				"subject": {
+					"$id": "#root/dublin_core/subject",
+					"title": "Subject",
+					"type": "string",
+					"enum": [
+						"Aligned Bible",
+						"Bible",
+						"Bible stories",
+						"Greek New Testament",
+						"Hebrew Old Testament",
+						"OBS Study Notes",
+						"OBS Study Questions",
+						"OBS Translation Notes",
+						"OBS Translation Questions",
+						"Open Bible Stories",
+						"Study Notes",
+ 						"Study Questions",
+						"Translation Academy",
+						"Translation Notes",
+						"Translation Questions",
+						"Translation Words",
+						"TSV Study Notes",
+						"TSV Study Questions",
+						"TSV Translation Notes",
+						"TSV Translation Questions",
+						"TSV Translation Words Links",
+						"TSV OBS Study Notes",
+						"TSV OBS Study Questions",
+						"TSV OBS Translation Notes",
+						"TSV OBS Translation Questions",
+						"TSV OBS Translation Words Links"
+					]
+				},
+				"title": {
+					"$id": "#root/dublin_core/title",
+					"title": "Title",
+					"type": "string",
+					"default": "",
+					"examples": [
+						"unfoldingWord® Literal Text"
+					]
+				},
+				"type": {
+					"$id": "#root/dublin_core/type",
+					"title": "Type",
+					"type": "string",
+					"default": "",
+					"examples": [
+						"bundle"
+					],
+					"enum": ["book", "bundle", "dict", "help", "man"]
+				},
+				"version": {
+					"$id": "#root/dublin_core/version",
+					"title": "Version",
+					"type": "string",
+					"default": "",
+					"examples": [
+						"10"
+					]
+				}
+			}
+		},
+		"checking": {
+			"$id": "#root/checking",
+			"title": "Checking",
+			"type": "object",
+			"required": [
+				"checking_entity",
+				"checking_level"
+			],
+			"properties": {
+				"checking_entity": {
+					"$id": "#root/checking/checking_entity",
+					"title": "Checking_entity",
+					"type": "array",
+					"default": [],
+					"items":{
+						"$id": "#root/checking/checking_entity/items",
+						"title": "Items",
+						"type": "string",
+						"default": "",
+						"examples": [
+							"unfoldingWord"
+						]
+					}
+				},
+				"checking_level": {
+					"$id": "#root/checking/checking_level",
+					"title": "Checking_level",
+					"type": ["integer", "string"],
+					"default": "1",
+					"enum": [
+						"1",
+						"2",
+						"3"
+					]
+				}
+			}
+		},
+		"projects": {
+			"$id": "#root/projects",
+			"title": "Projects",
+			"type": "array",
+			"default": [],
+			"items":{
+				"$id": "#root/projects/items",
+				"title": "Items",
+				"type": "object",
+				"required": [
+					"title",
+					"identifier",
+					"path"
+				],
+				"properties": {
+					"title": {
+						"$id": "#root/projects/items/title",
+						"title": "Title",
+						"type": "string",
+						"default": "",
+						"examples": [
+							"Genesis"
+						]
+					},
+					"versification": {
+						"$id": "#root/projects/items/versification",
+						"title": "Versification",
+						"type": ["string", "null"],
+						"default": null,
+						"examples": [
+							"ufw"
+						],
+						"enum": ["avd", "odx", "odx-hr", "other", "rsc", "ufw", "ufw-bn", "ufw-ml", "ufw-odx", "ufw-rev", "obs", "", null]
+					},
+					"identifier": {
+						"$id": "#root/projects/items/identifier",
+						"$ref": "#/definitions/projectIdentifier",
+						"title": "Identifier",
+						"default": ""
+					},
+					"sort": {
+						"$id": "#root/projects/items/sort",
+						"title": "Sort",
+						"type": "integer",
+						"default": 0
+					},
+					"path": {
+						"$id": "#root/projects/items/path",
+						"$ref": "#/definitions/path",
+						"title": "Path",
+						"examples": [
+							"./01-GEN.usfm"
+						]
+					},
+					"categories": {
+						"$id": "#root/projects/items/categories",
+						"title": "Categories",
+						"type": ["array", "null"],
+						"default": [],
+						"items":{
+							"$id": "#root/projects/items/categories/items",
+							"title": "Items",
+							"type": "string",
+							"enum": [
+								"bible-ot",
+								"bible-nt",
+								"ta"
+							]
+						}
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"languageTag": {
+			"type": "string",
+			"pattern": "^(((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang))|((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+))$",
+			"minLength": 2,
+			"description": "A valid IETF language tag as specified by BCP 47."
+		},
+		"localizedText": {
+			"type": "object",
+			"additionalProperties": {
+					"$ref": "#/definitions/trimmedText"
+			},
+			"propertyNames": {
+					"$ref": "#/definitions/languageTag"
+			},
+			"minProperties": 1,
+			"description": "A textual string specified in one or multiple languages, indexed by IETF language tag."
+		},
+		"mimeType": {
+			"type": "string",
+			"pattern": "^[\\-a-z0-9]+/[\\-a-z0-9+]+$",
+			"description": "An IANA media type (also known as MIME type)"
+		},
+		"path": {
+			"type": "string",
+			"pattern": "^[^\\/:?*\"><|]+(/[^\\/:?*\"><|]+)*$",
+			"description": "A file path, delimited by forward slashes."
+		},
+		"projectIdentifier": {
+			"type": "string",
+			"enum": [
+				"gen",
+				"exo",
+				"lev",
+				"num",
+				"deu",
+				"jos",
+				"jdg",
+				"rut",
+				"1sa",
+				"2sa",
+				"1ki",
+				"2ki",
+				"1ch",
+				"2ch",
+				"ezr",
+				"neh",
+				"est",
+				"job",
+				"psa",
+				"pro",
+				"ecc",
+				"sng",
+				"isa",
+				"jer",
+				"lam",
+				"ezk",
+				"dan",
+				"hos",
+				"jol",
+				"amo",
+				"oba",
+				"jon",
+				"mic",
+				"nam",
+				"hab",
+				"zep",
+				"hag",
+				"zec",
+				"mal",
+				"mat",
+				"mrk",
+				"luk",
+				"jhn",
+				"act",
+				"rom",
+				"1co",
+				"2co",
+				"gal",
+				"eph",
+				"php",
+				"col",
+				"1th",
+				"2th",
+				"1ti",
+				"2ti",
+				"tit",
+				"phm",
+				"heb",
+				"jas",
+				"1pe",
+				"2pe",
+				"1jn",
+				"2jn",
+				"3jn",
+				"jud",
+				"rev",
+				"obs",
+				"obs-sn",
+				"obs-sq",
+				"obs-tn",
+				"obs-tq",
+				"intro",
+				"process",
+				"translate",
+				"checking",
+				"bible"
+			]
+		},
+		"relationItem": {
+			"type": "string",
+			"pattern": "^(((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang))|((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+))/[a-z][a-z0-9-]*(\\?v=[0-9][a-z0-9\\._-]*)*$",
+			"minLength": 4,
+			"description": "A relation has valid IETF language tag as specified by BCP 47 and a valid resource, separated with a slash."
+		},
+		"timestamp": {
+			"type": "string",
+			"pattern": "^[12][0-9]{3}(-[01][0-9](-[0123][0-9])?)?$"
+		},
+		"trimmedText": {
+			"type": "string",
+			"pattern": "^\\S(.*\\S)?$",
+			"description": "A string without surrounding whitespace characters."
+		},
+		"url": {
+			"type": "string",
+			"pattern": "^((http(s)?|ftp)://)[^\\s$]+$",
+			"minLength": 1,
+			"description": "A valid **Uniform Resource Locator**.",
+			"examples": ["https://example.com"]
+		}
+	}
+}

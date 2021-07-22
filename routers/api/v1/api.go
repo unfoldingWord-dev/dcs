@@ -3,9 +3,9 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-// Package v1 Gitea API.
+// Package v1 DCS (Gitea) API.
 //
-// This documentation describes the Gitea API.
+// This documentation describes the DCS (Gitea) API.
 //
 //     Schemes: http, https
 //     BasePath: /api/v1
@@ -208,7 +208,10 @@ func reqToken() func(ctx *context.APIContext) {
 func reqExploreSignIn() func(ctx *context.APIContext) {
 	return func(ctx *context.APIContext) {
 		if setting.Service.Explore.RequireSigninView && !ctx.IsSigned {
-			ctx.Error(http.StatusUnauthorized, "reqExploreSignIn", "you must be signed in to search for users")
+			/*** DCS Customization ***/
+			return
+			//ctx.Error(http.StatusUnauthorized, "reqExploreSignIn", "you must be signed in to search for users")
+			/*** END DCS Customization ***/
 		}
 	}
 }
@@ -1068,6 +1071,10 @@ func Routes() *web.Route {
 		m.Group("/topics", func() {
 			m.Get("/search", repo.TopicSearch)
 		})
+
+		/*** DCS Customizations ***/
+		m.Post("/yaml", bind(misc.YamlOption{}), misc.Yaml)
+		/*** END DCS Customizations ***/
 	}, sudo())
 
 	return m

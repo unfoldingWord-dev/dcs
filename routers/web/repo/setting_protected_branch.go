@@ -13,6 +13,7 @@ import (
 	"code.gitea.io/gitea/models"
 	"code.gitea.io/gitea/modules/base"
 	"code.gitea.io/gitea/modules/context"
+	"code.gitea.io/gitea/modules/door43metadata"
 	"code.gitea.io/gitea/modules/git"
 	"code.gitea.io/gitea/modules/log"
 	"code.gitea.io/gitea/modules/setting"
@@ -83,6 +84,12 @@ func ProtectedBranchPost(ctx *context.Context) {
 				ctx.ServerError("SetDefaultBranch", err)
 				return
 			}
+			/*** DCS Customizations ***/
+			if err := door43metadata.ProcessDoor43MetadataForRepoRelease(repo, nil); err != nil {
+				ctx.ServerError("ProcessDoor43MetadataForRepoRelease", err)
+				return
+			}
+			/*** END DCS Customizations ***/
 		}
 
 		log.Trace("Repository basic settings updated: %s/%s", ctx.Repo.Owner.Name, repo.Name)

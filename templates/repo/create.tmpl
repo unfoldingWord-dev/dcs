@@ -49,6 +49,9 @@
 						<input id="repo_name" name="repo_name" value="{{.repo_name}}" autofocus required>
 						<span class="help">{{.i18n.Tr "repo.repo_name_helper"}}</span>
 					</div>
+					<!-- DCS Customizations -->
+					{{if .SignedUser.IsAdmin}}
+					<!-- END DCS Customizations -->
 					<div class="inline field">
 						<label>{{.i18n.Tr "repo.visibility"}}</label>
 						<div class="ui checkbox">
@@ -62,6 +65,9 @@
 						</div>
 						<span class="help">{{.i18n.Tr "repo.visibility_description"}}</span>
 					</div>
+					<!-- DCS Customizations -->
+					{{end}}
+					<!-- END DCS Customizations -->
 					<div class="inline field {{if .Err_Description}}error{{end}}">
 						<label for="description">{{.i18n.Tr "repo.repo_desc"}}</label>
 						<textarea id="description" name="description" placeholder="{{.i18n.Tr "repo.repo_desc_helper"}}">{{.description}}</textarea>
@@ -129,7 +135,8 @@
 
 						<div class="ui divider"></div>
 
-						<div class="inline field">
+						<!-- DCS Customizations -->
+						<div class="inline field hidden">
 							<label>.gitignore</label>
 							<div class="ui multiple search normal selection dropdown">
 								<input type="hidden" name="gitignores" value="{{.gitignores}}">
@@ -144,20 +151,10 @@
 						</div>
 						<div class="inline field">
 							<label>{{.i18n.Tr "repo.license"}}</label>
-							<div class="ui search selection dropdown">
-								<input type="hidden" name="license" value="{{.license}}">
-								<div class="default text">{{.i18n.Tr "repo.license_helper"}}</div>
-								<div class="menu">
-									<div class="item" data-value="">{{.i18n.Tr "repo.license_helper"}}</div>
-									{{range .Licenses}}
-										<div class="item" data-value="{{.}}">{{.}}</div>
-									{{end}}
-								</div>
-							</div>
-							<span class="help">{{.i18n.Tr "repo.license_helper_desc" "https://choosealicense.com/" | Str2html}}</span>
+							<span><a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_new">Creative Commons Attribution-ShareAlike 4.0 International License</a></span>
+							<input type="hidden" id="license" name="license" value="CC-BY-SA-4.0.md">
 						</div>
-
-						<div class="inline field">
+						<div class="inline field hidden">
 							<label>{{.i18n.Tr "repo.readme"}}</label>
 							<div class="ui selection dropdown">
 								<input type="hidden" name="readme" value="{{.readme}}">
@@ -170,6 +167,7 @@
 							</div>
 							<span class="help">{{.i18n.Tr "repo.readme_helper_desc"}}</span>
 						</div>
+						<!-- END DCS Customizations -->
 						<div class="inline field">
 							<div class="ui checkbox" id="auto-init">
 								<input class="hidden" name="auto_init" type="checkbox" tabindex="0" {{if .auto_init}}checked{{end}}>

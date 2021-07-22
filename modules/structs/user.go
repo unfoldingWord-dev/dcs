@@ -31,6 +31,12 @@ type User struct {
 	LastLogin time.Time `json:"last_login,omitempty"`
 	// swagger:strfmt date-time
 	Created time.Time `json:"created,omitempty"`
+	/*** DCS Customizations ***/
+	// Repo languages
+	RepoLanguages []string `json:"repo_languages"`
+	// Repo subjects
+	RepoSubjects []string `json:"repo_subjects"`
+	/*** END DCS Customizations ***/
 	// Is user restricted
 	Restricted bool `json:"restricted"`
 	// Is user active

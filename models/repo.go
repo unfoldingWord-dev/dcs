@@ -247,6 +247,10 @@ type Repository struct {
 	// Avatar: ID(10-20)-md5(32) - must fit into 64 symbols
 	Avatar string `xorm:"VARCHAR(64)"`
 
+	/*** DCS Customizations ***/
+	Metadata *map[string]interface{} `xorm:-`
+	/*** DCS Customizations ***/
+
 	CreatedUnix timeutil.TimeStamp `xorm:"INDEX created"`
 	UpdatedUnix timeutil.TimeStamp `xorm:"INDEX updated"`
 }
@@ -1028,6 +1032,8 @@ func GetRepoInitFile(tp, name string) ([]byte, error) {
 		return options.License(cleanedName)
 	case "label":
 		return options.Labels(cleanedName)
+	case "schema":
+		return options.Schemas(cleanedName)
 	default:
 		return []byte{}, fmt.Errorf("Invalid init file type")
 	}
@@ -1150,6 +1156,16 @@ func CreateRepository(ctx DBContext, doer, u *User, repo *Repository, overwriteO
 	} else if err = repo.recalculateAccesses(ctx.e); err != nil {
 		// Organization automatically called this in addRepository method.
 		return fmt.Errorf("recalculateAccesses: %v", err)
+	}
+
+	if u.Visibility == api.VisibleTypePublic && !repo.IsPrivate {
+		// Create/Remove git-daemon-export-ok for git-daemon...
+		daemonExportFile := path.Join(repo.RepoPath(), `git-daemon-export-ok`)
+		if f, err := os.Create(daemonExportFile); err != nil {
+			log.Error("Failed to create %s: %v", daemonExportFile, err)
+		} else {
+			f.Close()
+		}
 	}
 
 	if setting.Service.AutoWatchNewRepos {
@@ -1310,15 +1326,16 @@ func updateRepository(e Engine, repo *Repository, visibilityChanged bool) (err e
 		// Create/Remove git-daemon-export-ok for git-daemon...
 		daemonExportFile := path.Join(repo.RepoPath(), `git-daemon-export-ok`)
 		isExist, err := util.IsExist(daemonExportFile)
+		isPublic := !repo.IsPrivate && repo.Owner.Visibility == api.VisibleTypePublic
 		if err != nil {
 			log.Error("Unable to check if %s exists. Error: %v", daemonExportFile, err)
 			return err
 		}
-		if repo.IsPrivate && isExist {
+		if !isPublic && isExist {
 			if err = util.Remove(daemonExportFile); err != nil {
 				log.Error("Failed to remove %s: %v", daemonExportFile, err)
 			}
-		} else if !repo.IsPrivate && !isExist {
+		} else if isPublic && !isExist {
 			if f, err := os.Create(daemonExportFile); err != nil {
 				log.Error("Failed to create %s: %v", daemonExportFile, err)
 			} else {

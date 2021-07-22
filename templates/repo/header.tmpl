@@ -13,6 +13,16 @@
 					<a href="{{AppSubUrl}}/{{.Owner.Name}}">{{.Owner.Name}}</a>
 					<div class="mx-2">/</div>
 					<a href="{{$.RepoLink}}">{{.Name}}</a>
+					<!--- DCS Customizations -->
+					{{$prodDM := .GetLatestProdCatalogMetadata}}
+					{{if $prodDM}}
+						<span class="ui green label" title="Catalog: Production"><a href="{{.Link}}/releases/tag/{{$prodDM.Release.TagName | EscapePound}}" rel="nofollow">{{$prodDM.Release.TagName}}</a></span>
+					{{end}}
+					{{$preProdDM := .GetLatestPreProdCatalogMetadata}}
+					{{if $preProdDM}}
+						<span class="ui orange label" title="Catalog: Pre-Production"><a href="{{.Link}}/releases/tag/{{$preProdDM.Release.TagName | EscapePound}}" rel="nofollow">{{$preProdDM.Release.TagName}}</a></span>
+					{{end}}
+					<!-- END DCS Customizations -->
 					<div class="labels df ac fw">
 						{{if .IsTemplate}}
 							{{if .IsPrivate}}
@@ -42,6 +52,19 @@
 			</div>
 			{{if not .IsBeingCreated}}
 				<div class="repo-buttons">
+					<!-- DCS Customizations -->
+					{{$prodDM := .GetLatestProdCatalogMetadata}}
+					{{if $prodDM}}
+					<div class="ui labeled button" tabindex="0">
+						<a type="submit" class="ui compact basic button" href="{{.Link}}/releases/tag/{{$prodDM.Release.TagName | EscapePound}}">
+							<i class="icon fa-file-text"></i>{{$.i18n.Tr "repo.metadata.catalog"}}
+						</a>
+						<a class="ui basic label" href="{{.Link}}/releases/tag/{{$prodDM.Release.TagName | EscapePound}}">
+							{{$prodDM.Release.TagName}}
+						</a>
+					</div>
+					{{end}}
+					<!-- END DCS Customizations -->
 					{{if $.RepoTransfer}}
 						<form method="post" action="{{$.RepoLink}}/action/accept_transfer?redirect_to={{$.RepoLink}}">
 							{{$.CsrfTokenHtml}}

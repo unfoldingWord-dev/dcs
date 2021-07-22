@@ -29,6 +29,7 @@ import (
 	"code.gitea.io/gitea/modules/task"
 	"code.gitea.io/gitea/modules/translation"
 	"code.gitea.io/gitea/modules/web"
+	"code.gitea.io/gitea/routers/api/catalog" // DCS Customizations
 	apiv1 "code.gitea.io/gitea/routers/api/v1"
 	"code.gitea.io/gitea/routers/common"
 	"code.gitea.io/gitea/routers/private"
@@ -143,6 +144,10 @@ func NormalRoutes() *web.Route {
 	for _, middle := range common.Middlewares() {
 		r.Use(middle)
 	}
+
+	/*** DCS Customizations ***/
+	catalog.AllRoutes(r)
+	/*** END DCS Customizations ***/
 
 	r.Mount("/", web_routers.Routes())
 	r.Mount("/api/v1", apiv1.Routes())

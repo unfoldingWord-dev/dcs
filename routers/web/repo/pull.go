@@ -695,6 +695,21 @@ func ViewPullFiles(ctx *context.Context) {
 	ctx.Data["IsIssuePoster"] = ctx.IsSigned && issue.IsPoster(ctx.User.ID)
 	ctx.Data["HasIssuesOrPullsWritePermission"] = ctx.Repo.CanWriteIssuesOrPulls(issue.IsPull)
 
+	/*** DCS Customizations ***/
+	for _, file := range diff.Files {
+		if file.Name == "manifest.yaml" {
+			if entry, _ := commit.GetTreeEntryByPath(file.Name); entry != nil {
+				if result, err := base.ValidateManifestTreeEntry(entry); err != nil {
+					fmt.Printf("ValidateManifestTreeEntry: %v\n", err)
+				} else {
+					ctx.Data["ValidateManifestResult"] = result
+					ctx.Data["ValidateManifestResultErrors"] = base.StringifyValidationErrors(result)
+				}
+			}
+		}
+	}
+	/*** END DCS Customizations ***/
+
 	ctx.Data["IsAttachmentEnabled"] = setting.Attachment.Enabled
 	upload.AddUploadContext(ctx, "comment")
 

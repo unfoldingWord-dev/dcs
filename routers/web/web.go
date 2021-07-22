@@ -21,8 +21,10 @@ import (
 	"code.gitea.io/gitea/modules/templates"
 	"code.gitea.io/gitea/modules/validation"
 	"code.gitea.io/gitea/modules/web"
+	"code.gitea.io/gitea/routers/api/catalog" // DCS Customizations
 	"code.gitea.io/gitea/routers/api/v1/misc"
 	"code.gitea.io/gitea/routers/web/admin"
+	"code.gitea.io/gitea/routers/web/dcs" // DCS Customizations
 	"code.gitea.io/gitea/routers/web/dev"
 	"code.gitea.io/gitea/routers/web/events"
 	"code.gitea.io/gitea/routers/web/explore"
@@ -158,6 +160,9 @@ func Routes() *web.Route {
 	if setting.API.EnableSwagger {
 		// Note: The route moved from apiroutes because it's in fact want to render a web page
 		routes.Get("/api/swagger", append(common, misc.Swagger)...) // Render V1 by default
+		/*** DCS Customizations ***/
+		routes.Get("/api/catalog/swagger", catalog.Swagger)
+		/*** END DCS Customizations ***/
 	}
 
 	// TODO: These really seem like things that could be folded into Contexter or as helper functions
@@ -1032,5 +1037,13 @@ func RegisterRoutes(m *web.Route) {
 
 	if setting.API.EnableSwagger {
 		m.Get("/swagger.v1.json", SwaggerV1Json)
+		m.Get("/swagger.catalog.json", SwaggerCatalogJSON)
 	}
+
+	/*** DCS Customizations ***/
+	m.Get("/about", dcs.About)
+	m.Group("/catalog", func() {
+		m.Get("", dcs.Catalog)
+	}, ignSignIn)
+	/*** END DCS Customizations ***/
 }

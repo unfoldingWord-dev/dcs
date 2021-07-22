@@ -27,6 +27,7 @@
 					</div>
 				</div>
 				{{if not .Repository.IsFork}}
+					{{if .SignedUser.IsAdmin}}<!--- DCS Customizations -- Adds if .SignedUser.IsAdmin -->
 					<div class="inline field">
 						<label>{{.i18n.Tr "repo.visibility"}}</label>
 						<div class="ui checkbox">
@@ -38,6 +39,7 @@
 							<label>{{.i18n.Tr "repo.visibility_helper" | Safe}} {{if .Repository.NumForks}}<span class="text red">{{.i18n.Tr "repo.visibility_fork_helper"}}</span>{{end}}</label>
 						</div>
 					</div>
+					{{end}}
 				{{end}}
 				<div class="field {{if .Err_Description}}error{{end}}">
 					<label for="description">{{$.i18n.Tr "repo.repo_desc"}}</label>
@@ -663,6 +665,18 @@
 						{{end}}
 					</div>
 				</div>
+
+				<div class="ui divider"></div>
+
+				<div class="item">
+					<div class="ui right">
+						<button class="ui basic red show-modal button" data-modal="#scrub-repo-modal">{{.i18n.Tr "repo.settings.scrub"}}</button>
+					</div>
+					<div>
+						<h5>{{.i18n.Tr "repo.settings.scrub"}}</h5>
+						<p>{{.i18n.Tr "repo.settings.scrub_desc"}}</p>
+					</div>
+				</div>
 			{{end}}
 		</div>
 		{{end}}
@@ -863,6 +877,38 @@
 				</div>
 			</form>
 		</div>
+
+		<!-- DCS CUSTOM CODE -->
+		<div class="ui small modal" id="scrub-repo-modal">
+			<div class="header">
+				{{.i18n.Tr "repo.settings.scrub"}}
+			</div>
+			<div class="content">
+				<div class="ui warning message text left">
+					{{.i18n.Tr "repo.settings.scrub_notices_1" | Safe}} <br>
+				</div>
+				<form class="ui form" action="{{.Link}}" method="post">
+					{{.CsrfTokenHtml}}
+					<input type="hidden" name="action" value="scrub">
+					<div class="field">
+						<label>
+							{{.i18n.Tr "repo.settings.scrub_form_title"}}
+							<span class="text red">{{.Repository.Name}}</span>
+						</label>
+					</div>
+					<div class="required field">
+						<label for="repo_name">{{.i18n.Tr "repo.repo_name"}}</label>
+						<input id="repo_name" name="repo_name" required>
+					</div>
+
+					<div class="text right actions">
+						<div class="ui cancel button">{{.i18n.Tr "settings.cancel"}}</div>
+						<button class="ui red button">{{.i18n.Tr "repo.settings.scrub"}}</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- END DCS Customizations -->
 	{{end}}
 {{end}}
 

@@ -70,6 +70,7 @@ arguments - which can alternatively be run by running the subcommand web.`
 		cmd.CmdDoctor,
 		cmd.CmdManager,
 		cmd.Cmdembedded,
+		cmd.CmdDoor43MetadataGenerate,
 		cmd.CmdMigrateStorage,
 		cmd.CmdDocs,
 		cmd.CmdDumpRepository,

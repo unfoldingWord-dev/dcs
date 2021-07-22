@@ -17,7 +17,7 @@ import (
 	_ "golang.org/x/tools/cover"
 
 	// for vet
-	_ "code.gitea.io/gitea-vet"
+	_ "gitea.com/unfoldingword/gitea-vet"
 
 	// for swagger
 	_ "github.com/go-swagger/go-swagger/cmd/swagger"

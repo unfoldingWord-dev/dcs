@@ -15,13 +15,24 @@
 			{{if .DisableRegistration}}
 				<p>{{.i18n.Tr "auth.disable_register_prompt"}}</p>
 			{{else}}
+				<!-- DCS Customizations -->
+				<div>
+					{{.i18n.Tr "signup.agreement" | Safe}}
+				</div>
+				<!-- END DCS Customizations -->
 				<div class="required inline field {{if and (.Err_UserName) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeRegister))}}error{{end}}">
 					<label for="user_name">{{.i18n.Tr "username"}}</label>
 					<input id="user_name" type="text" name="user_name" value="{{.user_name}}" autofocus required>
+					<!-- DCS Customizations -->
+					<span class="help">{{.i18n.Tr "signup.user_name_helper" | Safe}}</span>
+					<!-- END DCS Customizations -->
 				</div>
 				<div class="required inline field {{if .Err_Email}}error{{end}}">
 					<label for="email">{{.i18n.Tr "email"}}</label>
 					<input id="email" name="email" type="email" value="{{.email}}" required>
+					<!-- DCS Customizations -->
+					<span class="help">{{.i18n.Tr "signup.email_helper" | Safe}}</span>
+					<!-- END DCS Customizations -->
 				</div>
 
 				{{if not .DisablePassword}}

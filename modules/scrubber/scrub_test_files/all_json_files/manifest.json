@@ -1,0 +1,62 @@
+{
+	"package_version": 6,
+	"format": "usfm",
+	"generator": {
+		"name": "ts-desktop",
+		"build": "55"
+	},
+	"target_language": {
+		"id": "ru",
+		"name": "Русский",
+		"direction": "ltr"
+	},
+	"project": {
+		"id": "2jn",
+		"name": "2 John"
+	},
+	"type": {
+		"id": "text",
+		"name": "Text"
+	},
+	"resource": {
+		"id": "ulb",
+		"name": "Unlocked Literal Bible"
+	},
+	"source_translations": [
+		{
+			"language_id": "ru",
+			"resource_id": "rsb",
+			"checking_level": 3,
+			"date_modified": 20160620,
+			"version": "1"
+		}
+	],
+	"parent_draft": {},
+	"translators": [
+		{
+			"name": "katya.savxxxx",
+			"email": "katya@gmail.com",
+			"phone": "+21 2122-22241"
+		},
+		{
+			"name": "Sergey Igxxxxx"
+		},
+		{
+			"name": "Artur Musxxxxx"
+		},
+		{
+			"name": "k.ivaxxxxxx"
+		},
+		{
+			"name": "rusxxxxxx"
+		}
+	],
+	"finished_chunks": [
+		"00-title",
+		"01-01",
+		"01-04",
+		"01-07",
+		"01-09",
+		"01-12"
+	]
+}

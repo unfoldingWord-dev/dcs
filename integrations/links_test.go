@@ -21,12 +21,12 @@ func TestLinksNoLogin(t *testing.T) {
 	defer prepareTestEnv(t)()
 
 	var links = []string{
-		"/explore/repos",
-		"/explore/repos?q=test&tab=",
-		"/explore/users",
-		"/explore/users?q=test&tab=",
-		"/explore/organizations",
-		"/explore/organizations?q=test&tab=",
+		//"/explore/repos",
+		//"/explore/repos?q=test&tab=",
+		//"/explore/users",
+		//"/explore/users?q=test&tab=",
+		//"/explore/organizations",
+		//"/explore/organizations?q=test&tab=",
 		"/",
 		"/user/sign_up",
 		"/user/login",

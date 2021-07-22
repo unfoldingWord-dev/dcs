@@ -1024,3 +1024,8 @@ is `data/repo-archive` and the default of `MINIO_BASE_PATH` is `repo-archive/`.
 - `SHOW_FOOTER_BRANDING`: **false**: Show Gitea branding in the footer.
 - `SHOW_FOOTER_VERSION`: **true**: Show Gitea and Go version information in the footer.
 - `SHOW_FOOTER_TEMPLATE_LOAD_TIME`: **true**: Show time of template execution in the footer.
+
+## DCS (`dcs`)
+
+- `GA_TRACKING_ID`: Google Analytics Tracking ID. Optional. If given, JS code on every page is injected with GA code.
+- `DOOR43_PREVIEW_URL`: **https://door43.org**: Door43 Preview URL, URL for the website that has the previews. Do not included trailing /'s and any path.

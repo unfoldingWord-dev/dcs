@@ -92,6 +92,12 @@ type Repository struct {
 	DefaultMergeStyle         string           `json:"default_merge_style"`
 	AvatarURL                 string           `json:"avatar_url"`
 	Internal                  bool             `json:"internal"`
+	Language                  string           `json:"language"`
+	Subject                   string           `json:"subject"`
+	Books                     []string         `json:"books"`
+	Title                     string           `json:"title"`
+	CheckingLevel             string           `json:"checking_level"`
+	Catalog                   *CatalogStages   `json:"catalog"`
 	MirrorInterval            string           `json:"mirror_interval"`
 }
 

@@ -68,15 +68,31 @@
 							{{if .CreatedUnix}}<span class="time">{{TimeSinceUnix .CreatedUnix $.Lang}}</span>{{end}}
 						{{else}}
 							{{if .IsDraft}}
-								<span class="ui yellow label">{{$.i18n.Tr "repo.release.draft"}}</span>
+								<span class="ui yellow label" title="draft">{{$.i18n.Tr "repo.release.draft"}}</span>
 							{{else if .IsPrerelease}}
-								<span class="ui orange label">{{$.i18n.Tr "repo.release.prerelease"}}</span>
+								<span class="ui orange label" title="preprod">{{$.i18n.Tr "repo.release.prerelease"}}</span>
 							{{else}}
-								<span class="ui green label">{{$.i18n.Tr "repo.release.stable"}}</span>
+								<span class="ui green label" title="prod">{{$.i18n.Tr "repo.release.stable"}}</span>
 							{{end}}
 							<span class="tag text blue">
 								<a class="df ac je" href="{{if .IsDraft}}#{{else}}{{$.RepoLink}}/src/tag/{{.TagName | EscapePound}}{{end}}" rel="nofollow">{{svg "octicon-tag" 16 "mr-2"}}{{.TagName}}</a>
 							</span>
+							<!-- DCS Customizations -->
+							{{$stage := "prod"}}
+							{{$color := "green"}}
+							{{if .IsPrerelease}}
+								{{$stage = "preprod"}}
+								{{$color = "orange"}}
+							{{else if .IsDraft}}
+								{{$stage = "draft"}}
+								{{$color = "yellow"}}
+							{{end}}
+							{{if .Door43Metadata}}
+								<span class="ui {{$color}} label" title="Stage: {{$stage}}" style="margin-top: 10px"><a href="{{$.RepoLink}}/src/tag/{{.TagName | EscapePound}}/manifest.yaml" rel="nofollow" style="opacity: inherit !important">{{$.i18n.Tr "repo.metadata.catalog"}} ({{$stage}})</a></span>
+							{{else if (and (not .IsTag) (not .IsDraft)) }}
+								<span class="ui red label" title="{{$.i18n.Tr "repo.metadata.invalid_manifest_tooltip"}}" style="margin-top: 10px"><a href="{{$.RepoLink}}/src/tag/{{.TagName | EscapePound}}/manifest.yaml" rel="nofollow" style="opacity: inherit #important">{{$.i18n.Tr "repo.metadata.invalid"}} ({{$stage}})</a></span>
+							{{end}}
+							<!-- END DCS Customizations -->
 							{{if not .IsDraft}}
 								<span class="commit">
 									<a class="mono" href="{{$.RepoLink}}/src/commit/{{.Sha1}}" rel="nofollow">{{svg "octicon-git-commit" 16 "mr-2"}}{{ShortSha .Sha1}}</a>

@@ -11,6 +11,7 @@ import (
 	"code.gitea.io/gitea/models"
 	"code.gitea.io/gitea/modules/base"
 	"code.gitea.io/gitea/modules/context"
+	"code.gitea.io/gitea/modules/log"
 	"code.gitea.io/gitea/modules/setting"
 	"code.gitea.io/gitea/modules/web"
 	"code.gitea.io/gitea/services/forms"
@@ -54,9 +55,12 @@ func ApplicationsPost(ctx *context.Context) {
 		return
 	}
 	if exist {
-		ctx.Flash.Error(ctx.Tr("settings.generate_token_name_duplicate", t.Name))
-		ctx.Redirect(setting.AppSubURL + "/user/settings/applications")
-		return
+		/*** DCS Customizations - Commented out so tokens can have the same name for translationCore ***/
+		//ctx.Flash.Error(ctx.Tr("settings.generate_token_name_duplicate", t.Name))
+		//ctx.Redirect(setting.AppSubURL + "/user/settings/applications")
+		//return
+		log.Info("Ignoring existing Access Token for DCS/translationCore, UID: %v, Token Name: %v", ctx.User.ID, form.Name)
+		/*** END DCS Customizations ***/
 	}
 
 	if err := models.NewAccessToken(t); err != nil {

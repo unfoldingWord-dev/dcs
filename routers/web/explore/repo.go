@@ -77,6 +77,28 @@ func RenderRepoSearch(ctx *context.Context, opts *RepoSearchOptions) {
 	topicOnly := ctx.QueryBool("topic")
 	ctx.Data["TopicOnly"] = topicOnly
 
+	/*** DCS Customizations ***/
+	var books, langs, keywords, subjects, repoNames, owners []string
+	if keyword != "" {
+		for _, token := range models.SplitAtCommaNotInString(keyword, true) {
+			if strings.HasPrefix(token, "book:") {
+				books = append(books, strings.TrimPrefix(token, "book:"))
+			} else if strings.HasPrefix(token, "lang:") {
+				langs = append(langs, strings.TrimPrefix(token, "lang:"))
+			} else if strings.HasPrefix(token, "subject:") {
+				subjects = append(subjects, strings.Trim(strings.TrimPrefix(token, "subject:"), `"`))
+			} else if strings.HasPrefix(token, "repo:") {
+				repoNames = append(repoNames, strings.TrimPrefix(token, "repo:"))
+			} else if strings.HasPrefix(token, "owner:") {
+				owners = append(owners, strings.TrimPrefix(token, "owner:"))
+			} else {
+				keywords = append(keywords, token)
+			}
+		}
+		keyword = strings.Join(keywords, ", ")
+	}
+	/*** END DCS Customizations ***/
+
 	repos, count, err = models.SearchRepository(&models.SearchRepoOptions{
 		ListOptions: models.ListOptions{
 			Page:     page,
@@ -91,6 +113,14 @@ func RenderRepoSearch(ctx *context.Context, opts *RepoSearchOptions) {
 		AllLimited:         true,
 		TopicOnly:          topicOnly,
 		IncludeDescription: setting.UI.SearchRepoDescription,
+		/*** DCS Customizaitons ***/
+		Books:           books,
+		Languages:       langs,
+		Subjects:        subjects,
+		Repos:           repoNames,
+		Owners:          owners,
+		IncludeMetadata: true,
+		/*** END DCS Customations ***/
 	})
 	if err != nil {
 		ctx.ServerError("SearchRepository", err)

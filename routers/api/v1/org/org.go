@@ -107,6 +107,10 @@ func GetAll(ctx *context.APIContext) {
 	// produces:
 	// - application/json
 	// parameters:
+	// - name: lang
+	//   in: query
+	//   description: If the org has one or more repos with the given language(s), the org will be in the results. Multiple lang's are ORed.
+	//   type: string
 	// - name: page
 	//   in: query
 	//   description: page number of results to return (1-based)
@@ -130,10 +134,11 @@ func GetAll(ctx *context.APIContext) {
 	listOptions := utils.GetListOptions(ctx)
 
 	publicOrgs, maxResults, err := models.SearchUsers(&models.SearchUserOptions{
-		ListOptions: listOptions,
-		Type:        models.UserTypeOrganization,
-		OrderBy:     models.SearchOrderByAlphabetically,
-		Visible:     vMode,
+		ListOptions:   listOptions,
+		Type:          models.UserTypeOrganization,
+		OrderBy:       models.SearchOrderByAlphabetically,
+		Visible:       vMode,
+		RepoLanguages: ctx.QueryStrings("lang"),
 	})
 	if err != nil {
 		ctx.Error(http.StatusInternalServerError, "SearchOrganizations", err)
